@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatima Asim | AI Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050510;
+            --primary: #7c3aed;
+            --secondary: #06b6d4;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(5, 5, 16, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6, .logo {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Particles Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.3);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        /* Gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #9333ea);
+            color: white;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Typography */
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        section {
+            padding: 6rem 10%;
+            min-height: 100vh;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5,5,16,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge {
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 5vw, 5rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .typewriter-container {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1.5rem;
+            height: 3rem;
+            color: var(--secondary);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        /* --- About Section --- */
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- Experience Section --- */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), transparent);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--bg-color);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .timeline-date {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .timeline-company {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .timeline-role {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .timeline-bullets {
+            color: var(--text-muted);
+            list-style-type: none;
+        }
+
+        .timeline-bullets li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-bullets li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* --- Projects Section --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-content {
+            flex-grow: 1;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .project-desc {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-pill {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--secondary);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        /* --- Skills Section --- */
+        .skills-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .skill-category {
+            margin-bottom: 1rem;
+        }
+
+        .skill-category h3 {
+            color: var(--secondary);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .skill-badge {
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            color: #a78bfa;
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-badge:hover {
+            background: rgba(124, 58, 237, 0.3);
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* --- Certifications Section --- */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .cert-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-card:hover {
+            border-color: rgba(124, 58, 237, 0.6);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .cert-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cert-title {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .cert-issuer {
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .cert-year {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            align-self: flex-start;
+            margin-top: auto;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        /* --- Contact Section --- */
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-subtext {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .email-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            gap: 1rem;
+        }
+
+        .email-text {
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-copy {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-copy:hover {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        #form-message {
+            display: none;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(5,5,16,0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                gap: 1.5rem;
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 5%;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-container"></canvas>
+
+    <nav>
+        <a href="#" class="logo text-gradient">Fatima Asim</a>
+        <button class="hamburger" id="hamburger">☰</button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#certifications">Certifications</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="badge">👋 Open to Work</div>
+        <h1 class="text-gradient">Hi, I'm Fatima Asim</h1>
+        <div class="typewriter-container">
+            <span id="typewriter"></span><span class="cursor">|</span>
+        </div>
+        <p>Building intelligent AI systems · Deep Learning · NLP · RAG Pipelines</p>
+        <div class="hero-btns">
+            <a href="#projects" class="btn btn-primary">View My Projects</a>
+            <a href="https://www.linkedin.com/in/fatimaasim-2564a335a" target="_blank" class="btn btn-outline">LinkedIn</a>
+        </div>
+        <a href="#about" class="scroll-down">↓</a>
+    </section>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <div class="about-container">
+            <div class="about-text">
+                <p>I'm an AI & Machine Learning engineer passionate about building real-world intelligent systems. From RAG pipelines and AI agents to deep learning classifiers and NLP apps — I turn ideas into deployed, working products.</p>
+                <p>Currently pursuing BS in Artificial Intelligence at KFUEIT (2023–2027).</p>
+            </div>
+            <div class="stats-grid">
+                <div class="glass-card stat-card">
+                    <div class="stat-number" data-target="2">0</div>
+                    <div class="stat-label">Internships</div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-number" data-target="6">0</div>
+                    <div class="stat-label">Projects Built</div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-number" data-target="7">0</div>
+                    <div class="stat-label">Certifications</div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-number" data-target="1092">0</div>
+                    <div class="stat-label">LinkedIn Followers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2>Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item glass-card">
+                <span class="timeline-date">May 2026 – Jun 2026</span>
+                <div class="timeline-company">CodeAlpha</div>
+                <div class="timeline-role">Artificial Intelligence Intern</div>
+                <ul class="timeline-bullets">
+                    <li>Built and deployed AI-powered projects applying machine learning, NLP, and deep learning to real-world problems</li>
+                    <li>Developed end-to-end ML pipelines as part of structured internship deliverables</li>
+                </ul>
+            </div>
+            <div class="timeline-item glass-card">
+                <span class="timeline-date">Apr 2026 – May 2026</span>
+                <div class="timeline-company">AuraNex Solutions</div>
+                <div class="timeline-role">Artificial Intelligence Intern</div>
+                <ul class="timeline-bullets">
+                    <li>Designed AI agent workflows using n8n to automate multi-step business processes</li>
+                    <li>Built RAG pipelines enabling LLMs to query domain-specific knowledge bases with improved accuracy</li>
+                    <li>Prototyped LLM-powered automation solutions and documented agent configurations</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="projects-grid">
+            <div class="glass-card project-card">
+                <div class="project-content">
+                    <h3 class="project-title">AuraSpace FAQ Chatbot</h3>
+                    <p class="project-desc">NLP-powered FAQ chatbot built from scratch with no external AI API. Uses TF-IDF + Cosine Similarity for smart question matching. Containerized with Docker and deployed on Hugging Face Spaces.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Flask</span>
+                        <span class="tech-pill">TF-IDF</span>
+                        <span class="tech-pill">Docker</span>
+                        <span class="tech-pill">Hugging Face</span>
+                    </div>
+                </div>
+                <div class="project-links">
+                    <a href="https://lnkd.in/dGQBBaX6" target="_blank" class="btn btn-outline btn-small">Live Demo 🔗</a>
+                    <a href="https://lnkd.in/dmTaNzMn" target="_blank" class="btn btn-outline btn-small">GitHub</a>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-content">
+                    <h3 class="project-title">SoundSense Audio Classifier</h3>
+                    <p class="project-desc">Deep learning system that classifies 12 environmental sounds in real time using Transfer Learning (MobileNetV2) on Mel Spectrogram features. Deployed as interactive Streamlit web app.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">TensorFlow</span>
+                        <span class="tech-pill">MobileNetV2</span>
+                        <span class="tech-pill">Librosa</span>
+                        <span class="tech-pill">Streamlit</span>
+                    </div>
+                </div>
+                <div class="project-links">
+                    <a href="https://lnkd.in/ebPSyWTs" target="_blank" class="btn btn-outline btn-small">Live Demo 🔗</a>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-content">
+                    <h3 class="project-title">FakeRadar – News Authenticity Detector</h3>
+                    <p class="project-desc">ML web app classifying real vs fake news using Logistic Regression. Achieved 88.75% accuracy on 44,898 articles with 0.99 precision score.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Logistic Regression</span>
+                        <span class="tech-pill">Scikit-learn</span>
+                        <span class="tech-pill">NLP</span>
+                        <span class="tech-pill">Flask</span>
+                    </div>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/Fatima-Asim/FakeRadar-News-Authenticity-Detector" target="_blank" class="btn btn-outline btn-small">GitHub</a>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-content">
+                    <h3 class="project-title">Asteroid Hazard Predictor</h3>
+                    <p class="project-desc">End-to-end Data Science project on NASA's asteroid dataset. ML classifier predicts Earth-hazard risk with an interactive Streamlit dashboard.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Scikit-learn</span>
+                        <span class="tech-pill">Pandas</span>
+                        <span class="tech-pill">Streamlit</span>
+                        <span class="tech-pill">NASA Dataset</span>
+                    </div>
+                </div>
+                <div class="project-links">
+                    <a href="https://lnkd.in/ebPSyWTs" target="_blank" class="btn btn-outline btn-small">Live Demo 🔗</a>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-content">
+                    <h3 class="project-title">AI Agent Workflow – n8n + Airtable</h3>
+                    <p class="project-desc">No-code AI agent pipeline integrating Mistral LLM with Simple Memory for conversation context and Airtable for dynamic record retrieval and updates.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">n8n</span>
+                        <span class="tech-pill">Mistral AI</span>
+                        <span class="tech-pill">Airtable</span>
+                        <span class="tech-pill">Simple Memory</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-content">
+                    <h3 class="project-title">LinguaAI – Multilingual Translator</h3>
+                    <p class="project-desc">Full-stack translator app with real-time language detection, text-to-speech, translation history saved in SQLite, file upload, and light/dark mode. Deployed live on Railway.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Flask</span>
+                        <span class="tech-pill">SQLite</span>
+                        <span class="tech-pill">gTTS</span>
+                        <span class="tech-pill">Bootstrap 5</span>
+                        <span class="tech-pill">Railway</span>
+                    </div>
+                </div>
+                <div class="project-links">
+                    <a href="https://lnkd.in/duSgAwDB" target="_blank" class="btn btn-outline btn-small">Live Demo 🔗</a>
+                    <a href="https://lnkd.in/dKtEGFzQ" target="_blank" class="btn btn-outline btn-small">GitHub</a>
+                </div>
+            </div>
+
+            <div class="glass-card project-card">
+                <div class="project-content">
+                    <h3 class="project-title">Movie Recommender System</h3>
+                    <p class="project-desc">Content-based movie recommendation system trained on 5000+ movies dataset from Kaggle. Select any movie and get 5 similar recommendations instantly using Cosine Similarity. Built recommendation engine from scratch using ML and deployed live on Streamlit Cloud.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Pandas</span>
+                        <span class="tech-pill">Scikit-learn</span>
+                        <span class="tech-pill">Streamlit</span>
+                        <span class="tech-pill">Kaggle</span>
+                        <span class="tech-pill">GitHub</span>
+                    </div>
+                </div>
+                <div class="project-links">
+                    <a href="https://lnkd.in/gt2hs4k7" target="_blank" class="btn btn-outline btn-small">Live Demo 🔗</a>
+                    <a href="https://lnkd.in/gwMazMBq" target="_blank" class="btn btn-outline btn-small">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills-container glass-card">
+            <div class="skill-category">
+                <h3>Languages & Libraries</h3>
+                <div class="skills-grid">
+                    <span class="skill-badge">Python</span>
+                    <span class="skill-badge">SQL</span>
+                    <span class="skill-badge">NumPy</span>
+                    <span class="skill-badge">Pandas</span>
+                    <span class="skill-badge">Scikit-learn</span>
+                    <span class="skill-badge">TensorFlow</span>
+                    <span class="skill-badge">Librosa</span>
+                    <span class="skill-badge">LangChain</span>
+                    <span class="skill-badge">Matplotlib</span>
+                    <span class="skill-badge">Seaborn</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>AI / ML / DL</h3>
+                <div class="skills-grid">
+                    <span class="skill-badge">LLMs</span>
+                    <span class="skill-badge">RAG</span>
+                    <span class="skill-badge">AI Agents</span>
+                    <span class="skill-badge">NLP</span>
+                    <span class="skill-badge">Transfer Learning</span>
+                    <span class="skill-badge">Deep Learning</span>
+                    <span class="skill-badge">Prompt Engineering</span>
+                    <span class="skill-badge">FAISS</span>
+                    <span class="skill-badge">TF-IDF</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Web & Deployment</h3>
+                <div class="skills-grid">
+                    <span class="skill-badge">Flask</span>
+                    <span class="skill-badge">Streamlit</span>
+                    <span class="skill-badge">Bootstrap</span>
+                    <span class="skill-badge">Docker</span>
+                    <span class="skill-badge">Railway</span>
+                    <span class="skill-badge">Hugging Face Spaces</span>
+                    <span class="skill-badge">REST APIs</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Tools</h3>
+                <div class="skills-grid">
+                    <span class="skill-badge">n8n</span>
+                    <span class="skill-badge">Airtable</span>
+                    <span class="skill-badge">Jupyter</span>
+                    <span class="skill-badge">Google Colab</span>
+                    <span class="skill-badge">Git</span>
+                    <span class="skill-badge">GitHub</span>
+                    <span class="skill-badge">VS Code</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications">
+        <h2>Certifications</h2>
+        <div class="cert-grid">
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-title">Introduction to AI Agents</div>
+                <div class="cert-year">2026</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-title">AI Agents Fundamentals</div>
+                <div class="cert-year">2026</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-title">Supervised Machine Learning: Regression & Classification</div>
+                <div class="cert-issuer">Coursera – Andrew Ng</div>
+                <div class="cert-year">2025</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-title">Introduction to AI for Work</div>
+                <div class="cert-year">2025</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-title">Machine Learning Introduction for Everyone</div>
+                <div class="cert-year">2025</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-title">Introduction to AI</div>
+                <div class="cert-year">2025</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon">🏆</div>
+                <div class="cert-title">Python for Data Science & AI</div>
+                <div class="cert-year">2025</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="contact-container">
+            <h2>Let's Work Together</h2>
+            <p class="contact-subtext">I'm currently open to internships, collaborations, and exciting AI projects.</p>
+            
+            <div class="contact-row">
+                <div class="email-box">
+                    <span class="email-text" id="email-text">fa437918@gmail.com</span>
+                    <button class="btn-copy" id="btn-copy" onclick="copyEmail()">Copy</button>
+                </div>
+                <a href="https://www.linkedin.com/in/fatimaasim-2564a335a" target="_blank" class="btn btn-outline">LinkedIn</a>
+            </div>
+
+            <div class="glass-card">
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" class="form-control" required placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" required placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" rows="5" required placeholder="Hello Fatima, I would like to..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+                <div id="form-message">Message sent successfully! I'll get back to you soon.</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // --- Active Nav Link on Scroll ---
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // --- Typewriter Effect ---
+        const phrases = ["AI Engineer", "ML Developer", "AI Agents Builder", "Python Developer"];
+        let i = 0;
+        let j = 0;
+        let currentPhrase = [];
+        let isDeleting = false;
+        let isEnd = false;
+        const typewriterEl = document.getElementById('typewriter');
+
+        function loop() {
+            isEnd = false;
+            typewriterEl.innerHTML = currentPhrase.join('');
+
+            if (i < phrases.length) {
+
+                if (!isDeleting && j <= phrases[i].length) {
+                    currentPhrase.push(phrases[i][j]);
+                    j++;
+                    typewriterEl.innerHTML = currentPhrase.join('');
+                }
+
+                if(isDeleting && j <= phrases[i].length) {
+                    currentPhrase.pop(phrases[i][j]);
+                    j--;
+                    typewriterEl.innerHTML = currentPhrase.join('');
+                }
+
+                if (j == phrases[i].length) {
+                    isEnd = true;
+                    isDeleting = true;
+                }
+
+                if (isDeleting && j === 0) {
+                    currentPhrase = [];
+                    isDeleting = false;
+                    i++;
+                    if (i == phrases.length) {
+                        i = 0;
+                    }
+                }
+            }
+            const speedUp = Math.random() * (80 - 50) + 50;
+            const normalSpeed = Math.random() * (300 - 200) + 200;
+            const time = isEnd ? 2000 : isDeleting ? speedUp : normalSpeed;
+            setTimeout(loop, time);
+        }
+
+        loop();
+
+        // --- Animated Counter ---
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 10);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                
+                // Use Intersection Observer to start counting only when visible
+                const observer = new IntersectionObserver((entries) => {
+                    if(entries[0].isIntersecting) {
+                        updateCount();
+                        observer.disconnect();
+                    }
+                }, { threshold: 0.5 });
+                
+                observer.observe(counter);
+            });
+        }
+        
+        animateCounters();
+
+        // --- Canvas Starfield/Particles ---
+        const canvas = document.getElementById("canvas-container");
+        const ctx = canvas.getContext("2d");
+
+        let width, height;
+        let particles = [];
+
+        function init() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            particles = [];
+            
+            const numParticles = Math.floor(width * height / 10000);
+            
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = Math.random() > 0.5 ? '#7c3aed' : '#06b6d4';
+                this.opacity = Math.random();
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Optional: Draw connecting lines
+            for(let i=0; i<particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                for(let j=i; j<particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if(distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(124, 58, 237, ${0.1 - distance/1000})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', init);
+        
+        init();
+        animate();
+
+        // --- Copy Email Function ---
+        function copyEmail() {
+            const emailText = document.getElementById("email-text").innerText;
+            navigator.clipboard.writeText(emailText).then(() => {
+                const btn = document.getElementById("btn-copy");
+                const originalText = btn.innerText;
+                btn.innerText = "Copied!";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        // --- Form Submit Function ---
+        document.getElementById("contact-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            // Optional: you can add real form submission logic here (like sending to an API)
+            document.getElementById("form-message").style.display = "block";
+            this.reset();
+            
+            setTimeout(() => {
+                document.getElementById("form-message").style.display = "none";
+            }, 5000);
+        });
+
+    </script>
+</body>
+</html>
